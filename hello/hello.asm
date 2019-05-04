@@ -25,7 +25,7 @@ _start:
 	xor 	rdi, rdi				; rdi = EXIT_SUCCESS =  0 (-1 = failure)
 	syscall							; call the Linux kernel to exit
 ; ===========================================================================
-section .rodata					; == READ-ONLY DATA SECTION =======
+section .rodata						; ======= READ-ONLY DATA SECTION ========
     msg: 	db "Hello, world!", LF, LF
     msglen: equ $ - msg
 ; ===========================================================================

@@ -7,17 +7,18 @@
 #   Requires:  ~/maketest.sh
 #
 #############################################################################
-release: hello.asm Makefile
-	@source maketest.sh && test release debug
-	yasm -f elf64 -o hello.obj hello.asm
-	ld hello.obj -o hello
+PROG := hello
 
-debug: hello.asm Makefile
-	@source maketest.sh && test debug release
-	yasm -f elf64 -g dwarf2 -o hello.obj hello.asm
-	ld -g hello.obj -o hello
+release: $(PROG).asm Makefile
+	@source ../maketest.sh && test release debug
+	yasm -f elf64 -o $(PROG).obj $(PROG).asm
+	ld $(PROG).obj -o $(PROG)
+
+debug: $(PROG).asm Makefile
+	@source ../maketest.sh && test debug release
+	yasm -f elf64 -g dwarf2 -o $(PROG).obj $(PROG).asm
+	ld -g $(PROG).obj -o $(PROG)
 
 clean:
-	@rm -f hello hello.obj debug release
-
+	@rm -f $(PROG) $(PROG).obj a.out debug release
 #############################################################################
