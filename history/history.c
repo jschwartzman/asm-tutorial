@@ -8,7 +8,8 @@
 #include <fcntl.h>	// declare open
 #include <unistd.h>	// declare read
 
-#define		BUF_SIZE	16384
+#define		BUF_SIZE	4096
+#define		EOL			0
 
 int main(void)
 {
@@ -17,13 +18,20 @@ int main(void)
 	const char* buffer[BUF_SIZE];					// buffer for file read
 	
 	printf("\n");									// print blank line
-	
 	int fd = open(filedir, O_RDONLY);				// open file
-	int count = read(fd, &buffer, 16384);			// read file
-	printf("%s", buffer);							// print file
+	int count;
+
+	do
+	{
+		count = read(fd, &buffer, BUF_SIZE - 1);	// read file
+		buffer[count] = EOL;						// write EOL at end
+		printf("%s", buffer);						// print file
+	} 
+	while (count > 0);
+		
 	int returnCode = close(fd);						// close file
 	
-	printf("\n");									// print blank line
+	printf("\n\n");									// print blank line
 	return returnCode;
 }
    
