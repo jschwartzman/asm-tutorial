@@ -1,18 +1,18 @@
 ; ===========================================================================
 ; uname.asm - retrieve uname info from the kernel and print it
 ; John Schwartzman, Forte Systems, Inc.
-; 04/28/2019
+; 05/03/2019
 ; linux x86_64
 ; yasm -f elf64 -g dwarf2 -o uname.obj uname.asm
 ; ld -g uname.obj -o uname
 ; ===========================================================================
 STDOUT          equ     1			; define some constants
-SYS_EXIT        equ     60
-SYS_WRITE       equ     1
-SYS_UNAME       equ     63
-UTSNAME_SIZE    equ     64
+SYS_EXIT        equ     60          ; Linux service ID for SYS_EXIT
+SYS_WRITE       equ     1           ; Linux service ID for SYS_WRITE
+SYS_UNAME       equ     63          ; Linux service ID for SYS_UNAME
+UTSNAME_SIZE    equ     65
 HEADER_SIZE     equ     11
-WRITELINE_SIZE  equ     1
+WRITELINE_SIZE  equ     1           ; num bytes to write for linefeed
 ZERO            equ     0
 ; ===========================================================================
 section .text       				; ============ CODE SECTION =============
@@ -27,13 +27,13 @@ _start:				    	        ; beginning of program
     mov 	rdi, rax                ; if -1 is returned in rax
     cmp 	rax, ZERO               ; put it in rdi to tell OS we failed
     jnz 	exit                    ; exit if error getting SYS_UNAME
-
-    mov 	rsi, sysname            ; print sysname header
-    mov 	rdx, HEADER_SIZE
+                                    ; 1st arg set in write method
+    mov 	rsi, sysname            ; print sysname header - 2nd arg
+    mov 	rdx, HEADER_SIZE        ; print sysname header - 3rd arg
     call 	write                   ; call local method - print w/o linefeed
-    
-    lea 	rsi, [sysname_res]      ; print sysname data
-    mov 	rdx, UTSNAME_SIZE
+                                    ; 1st arg set in writeLine method
+    lea 	rsi, [sysname_res]      ; print sysname data - 2nd arg
+    mov 	rdx, UTSNAME_SIZE       ; print sysname data - 3rd arg
     call 	writeLine               ; call local method - print with linefeed
     
     mov 	rsi, nodename           ; print nodename header
@@ -71,40 +71,40 @@ _start:				    	        ; beginning of program
     xor 	rdi, rdi       		    ; fall through to exit rdi = EXIT_SUCCESS
 
 exit:						        ; =========== local function ============
-    mov 	rax, SYS_EXIT		    ; exit program - rdi contains exit code
+    mov 	rax, SYS_EXIT		    ; exit program - 1st arg rdi = exit code
     syscall                     	; invoke kernel
 
 write:                          	; =========== local function ============
-    mov 	rax, SYS_WRITE		    ; uses rax, rdx, rsi, rdi
+    mov 	rax, SYS_WRITE		    ; Linux service ID
     mov 	rdi, STDOUT			    ; rdi is 1st arg, rsi is second arg
     syscall					        ; invoke kernel
     ret					            ; ======== end of write function ========
 
 writeLine:					        ; =========== local function ============                     	
-    mov 	rax, SYS_WRITE		    ; uses rax, rdx, rsi, rdi
-    mov 	rdi, STDOUT
+    mov 	rax, SYS_WRITE		    ; Linux service ID
+    mov 	rdi, STDOUT             ; rdi is 1st arg
     syscall					        ; invoke kernel and fall into writeNewLine
 
 writeNewLine:				        ; =========== local function ============
-    mov 	rax, SYS_WRITE
-    mov 	rdi, STDOUT
-    mov 	rsi, linefeed
-    mov 	rdx, WRITELINE_SIZE
+    mov 	rax, SYS_WRITE          ; Linux service ID
+    mov 	rdi, STDOUT             ; first argument
+    mov 	rsi, linefeed           ; second argument
+    mov 	rdx, WRITELINE_SIZE     ; third argument
     syscall                     	; write the newline
     ret					            ; ======== end of writeNewLine ==========
 ; ===========================================================================
-section .rodata				        ; ======= read-only data section ========
+section     .rodata			        ; ======= read-only data section ========
 sysname     db      "OS name:   "
 nodename    db      "node name: "
 release     db      "release:   "
 version     db      "version:   "
 domain      db      "machine:   "
-linefeed    db      10
+linefeed    db      10              ; ASCII linefeed character
 ; ===========================================================================
-section .bss				        ; ===== uninitialized data section ======
-sysname_res:    resb    UTSNAME_SIZE + 1
-nodename_res:   resb    UTSNAME_SIZE + 1
-release_res:    resb    UTSNAME_SIZE + 1
-version_res:    resb    UTSNAME_SIZE + 1
-domain_res:     resb    UTSNAME_SIZE + 1
+section     .bss			        ; ===== uninitialized data section ======
+sysname_res:    resb    UTSNAME_SIZE
+nodename_res:   resb    UTSNAME_SIZE
+release_res:    resb    UTSNAME_SIZE
+version_res:    resb    UTSNAME_SIZE
+domain_res:     resb    UTSNAME_SIZE
 ; ===========================================================================
