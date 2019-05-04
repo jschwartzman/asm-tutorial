@@ -1,56 +1,54 @@
 ; ===========================================================================
 ; cmdline.asm - retrieve cmdline info from the OS and print it
 ; John Schwartzman, Forte Systems, Inc.
-; 04/28/2019
+; 05/02/2019
 ; linux x86_64
 ; yasm -f elf64 -g dwarf2 -o cmdline.obj cmdline.asm
 ; gcc -g cmdline.obj -o cmdline
 ; ===========================================================================
-LF              equ 10				; define constants
-EOL             equ 0
-TAB				equ 9
-ARG_SIZE		equ 8
+LF              equ 10				; define constants - ASCII linefeed char
+EOL             equ 0				; end of line
+TAB				equ 9				; ASCII tab char
+ARG_SIZE		equ 8				; size of argv vector
 ; ===========================================================================
 section	.text						; ============ CODE SECTION =============
 global	main						; gcc linker expects main, not _start
-
 extern printf						; tell assembler about external reference
 
-main:
+main:								; program starts here
 	push	rbp						; establish stack frame
 	mov		rbp, rsp				; main has no local variables
 
-	mov		r12, rdi				; r12 = argc
-	mov		r13, rsi				; [r13] => argv[0]
+	mov		r12, rdi				; r12 = argc 		- save argc
+	mov		r13, rsi				; [r13] => argv[0]	- save argv table addr
 	xor		rbx, rbx				; rbx = index var = 0
-
-	call	printBlankLine
-
-printLoop:
-	lea		rdi, [format]			; 1st arg to printf
-	mov		rsi, rbx				; 2nd arg to printf
-	mov		rdx, [r13+rbx*ARG_SIZE]	; 3rd arg to printf
-	xor		rax, rax				; no floating point args
-	call	printf
+									; NOTE: r12, r13, rbx are callee saved
+	call	printNewLine
+	
+getArgvLoop:
+	lea		rdi, [format]			; 1st arg to printf - format string
+	mov		rsi, rbx				; 2nd arg to printf - index number
+	mov		rdx, [r13+rbx*ARG_SIZE]	; 3rd arg to printf - rdx => argv[index]
+	call	print
 
 	inc		rbx						; index++
-	cmp		rbx, r12				; iindex == (last arg + 1)?
-	jl		printLoop				; jump if no
+	cmp		rbx, r12				; index == argc?
+	jl		getArgvLoop				; jump if no - print more argv[]
 
-	call	printBlankLine
+	call	printNewLine
+	xor		rax, rax				; EXIT_SUCCESS - fall through to finish
 
-	xor		rax, rax				; indicate EXIT_SUCCESS
-	jmp		finish
-	
-printBlankLine:						; ============ local function ===========
-	lea		rdi, [newLine]			; print an empty line
-	xor		rax, rax				; no floating point to print
-	call	printf					; call C wrapper function
-	ret								; ==== end of printBlankLine function ===
-
-finish:
+finish:								; ==== this is the end of the program ===
 	leave							; restore stack
 	ret								; return from main with retCode in rax
+; ============================= LOCAL METHODS ===============================
+printNewLine:						; local method (alt entry to print)
+	lea		rdi, [newLine]			; fall through to printf
+
+print:								; rdi, rsi and rdx are args to printf
+	xor		rax, rax				; no floating point args to printf
+	call	printf
+	ret
 ; ===========================================================================
 section		.rodata					; ======= read-only data section ========
 format		db 	"cmd #%d", TAB, "%s", LF, EOL
