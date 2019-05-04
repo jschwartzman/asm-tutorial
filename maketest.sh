@@ -1,6 +1,6 @@
 #!/bin/bash
 #############################################################################
-# ~/bin/maketest.sh
+# maketest.sh
 # John Schwartzman, Forte Systems, Inc. 4/26/2019
 #
 # A makefile helper script to manage debug and release makefiles 
@@ -17,5 +17,4 @@ function test()
 		rm -f $2;
 	fi
 }
-
 #############################################################################
