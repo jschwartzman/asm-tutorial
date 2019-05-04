@@ -1,8 +1,12 @@
 #!/bin/bash
+#############################################################################
 # makeasm
-# run make cmd in ASMPATH subdirectories
+# John Schwartzman, Forte Systems, Inc. 05/04/2019
+#
+# A makefile helper script to invoke Makefiles in subdirectories
+#
 # cmd = release, debug or clean
-
+#############################################################################
 ASMPATH=~/Development/asm
 DIRS="hello uname history cmdline printenv"
 
@@ -14,3 +18,4 @@ do
 done
 
 echo
+#############################################################################
