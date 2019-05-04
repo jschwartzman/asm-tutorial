@@ -6,7 +6,7 @@
 # A makefile helper script to manage debug and release makefiles 
 # using the same source, object and executable files.
 # In Makefile use:  @source ../maketest.sh && test release debug (release)
-#					@source ../maketest.sh && test debug release (debug)
+#		    @source ../maketest.sh && test debug release (debug)
 # Invoke Makefile with make release, make debug or make clean.
 #
 #############################################################################
