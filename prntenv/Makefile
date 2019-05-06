@@ -4,7 +4,7 @@
 #
 #	Commands:  make release, make debug, make clean
 #			   make = make release
-#   Requires:  ~/maketest.sh
+#   	Requires:  ../maketest.sh
 #
 #############################################################################
 PROG := prntenv
