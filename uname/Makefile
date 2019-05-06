@@ -4,7 +4,7 @@
 #
 #	Commands:  make release, make debug, make clean
 #			   make = make release
-#   Requires:  ../asm/maketest.sh
+#   	Requires:  ../asm/maketest.sh
 #
 #############################################################################
 PROG := uname
