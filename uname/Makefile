@@ -1,10 +1,12 @@
 #############################################################################
 #
 #	Makefile for uname
+# 	John Schwartzman, Forte Systems, Inc.
+# 	05/06/2019
 #
 #	Commands:  make release, make debug, make clean
 #			   make = make release
-#   	Requires:  ../asm/maketest.sh
+#   Requires:  ../asm/maketest.sh
 #
 #############################################################################
 PROG := uname
