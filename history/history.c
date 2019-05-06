@@ -1,4 +1,6 @@
 // history.c
+// John Schwartzman, Forte Systems, Inc.
+// 05/06/2019
 // compile with: gcc history.c or gcc -g history.c (debug)
 // to execute:   ./a.out
 
