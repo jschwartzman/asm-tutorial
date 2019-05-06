@@ -1,10 +1,12 @@
 #############################################################################
 #
 #	Makefile for prntenv
+# 	John Schwartzman, Forte Systems, Inc.
+# 	05/06/2019
 #
 #	Commands:  make release, make debug, make clean
 #			   make = make release
-#   	Requires:  ../maketest.sh
+#   Requires:  ../maketest.sh
 #
 #############################################################################
 PROG := prntenv

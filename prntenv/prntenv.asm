@@ -31,7 +31,7 @@ prntenv:							; this module doesn't have _start
 	push	r12						; save callee-saved register
 	mov		r12, rdi				; save parameter (asciiz date string)
 
-	; get and save environment variables by using macro for each variable
+	; get and save environment variables by using macro for each env var
 	getSaveEnv	envHOME, 	 bufHOME
 	getSaveEnv 	envHOSTNAME, bufHOSTNAME
 	getSaveEnv	envHOSTTYPE, bufHOSTTYPE

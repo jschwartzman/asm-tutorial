@@ -1,4 +1,6 @@
 // prntenv.c
+// John Schwartzman, Forte Systems, Inc.
+// 05/06/2019
 // assemble prntenv.asm:  yasm -f elf64 -g dwarf2 -o printf.obj printf.asm
 // compile and link:      gcc -g prntenv.c prntenv.obj -o prntenv
 // to execute:            ./prntenv
