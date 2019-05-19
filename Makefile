@@ -1,15 +1,15 @@
 #############################################################################
 #
-#	Makefile to invoke make in asm subdirectories
+#	Makefile to invoke make in subdirectories
 # 	John Schwartzman, Forte Systems, Inc.
-# 	05/06/2019
+# 	05/16/2019
 #
 #	Commands:  make release, make debug, make clean
 #			   make = make release
 #
 #############################################################################
-ASMPATH := $(shell pwd)
 SUBDIRS := $(wildcard */.)
+SHELL   := /bin/bash
 
 .PHONEY: clean debug release
 
