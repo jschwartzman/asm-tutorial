@@ -1,6 +1,7 @@
 // uname.c
 // John Schwartzman, Forte Systems, Inc.
 // 05/06/2019
+// x86_64
 // compile with: gcc uname.c or gcc -g uname.c (debug)
 // to execute:   ./a.out
 
