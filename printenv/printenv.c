@@ -1,6 +1,7 @@
 // printenv.c
 // John Schwartzman, Forte Systems, Inc.
-// 05/06/2019
+// 05/17/2019
+// x86_64
 // compile with: gcc printenv.c or gcc -g printenv.c (debug)
 // to execute:   ./a.out
 
@@ -9,21 +10,23 @@
 
 int main(void)
 {
-    // get some environment variables
-    const char* envHOME     = getenv("HOME");
-    const char* envHOSTNAME = getenv("HOSTNAME");
-    const char* envHOSTTYPE = getenv("HOSTTYPE");
-    const char* envCPU      = getenv("CPU");
-    const char* envPWD      = getenv("PWD");
-    const char* envTERM     = getenv("TERM");
-    const char* envPATH     = getenv("PATH");
-    const char* envSHELL    = getenv("SHELL");
-    const char* envEDITOR   = getenv("EDITOR");
-    const char* envMAIL     = getenv("MAIL");
+    // get some bufironment variables
+    const char* bufHOME     = getenv("HOME");
+    const char* bufHOSTNAME = getenv("HOSTNAME");
+    const char* bufHOSTTYPE = getenv("HOSTTYPE");
+    const char* bufCPU      = getenv("CPU");
+    const char* bufPWD      = getenv("PWD");
+    const char* bufTERM     = getenv("TERM");
+    const char* bufPATH     = getenv("PATH");
+    const char* bufSHELL    = getenv("SHELL");
+    const char* bufEDITOR   = getenv("EDITOR");
+    const char* bufMAIL     = getenv("MAIL");
+    const char* bufLANG     = getenv("LANG");
+    const char* bufPS1      = getenv("PS1");
+    const char* bufHISTFILE = getenv("HISTFILE");
 
-    // print the environment variables and their names
-    printf("\n"
-           "Environment Variables:\n"
+    // print the bufironment variables and their names
+    printf("\nEnvironment Variables:\n"
            "\tHOME     = %s\n"
            "\tHOSTNAME = %s\n"
            "\tHOSTTYPE = %s\n"
@@ -33,10 +36,13 @@ int main(void)
            "\tPATH     = %s\n"
            "\tSHELL    = %s\n"
            "\tEDITOR   = %s\n"
-           "\tMAIL     = %s\n\n",
-           envHOME, envHOSTNAME, envHOSTTYPE, envCPU,
-           envPWD, envTERM, envPATH, envSHELL,
-           envEDITOR, envMAIL);
+           "\tMAIL     = %s\n"
+           "\tLANG     = %s\n"
+           "\tPS1      = %s\n"
+           "\tHISTFILE = %s\n\n",
+           bufHOME, bufHOSTNAME, bufHOSTTYPE, bufCPU, bufPWD,
+           bufTERM, bufPATH, bufSHELL, bufEDITOR, bufMAIL, 
+           bufLANG, bufPS1, bufHISTFILE);
 
     return EXIT_SUCCESS;
 }
