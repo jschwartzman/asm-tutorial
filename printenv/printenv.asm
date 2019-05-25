@@ -2,7 +2,7 @@
 ; printenv.asm - demonstrates invoking getenv, printf and strncpy
 ; in /lib64/libc.so.6
 ; John Schwartzman, Forte Systems, Inc.
-; 05/17/2019
+; 05/19/2019
 ; linux x86_64
 ; yasm -f elf64 -g dwarf2 -o printenv.obj -l printenv.lst printenv.asm
 ; gcc -g printf.obj -o printf
@@ -14,17 +14,16 @@ TAB				equ 	  9			; ASCII tab character
 NUM_PUSH		equ 	  8			; we PUSH 8 addresses to call printf
 PUSH_SIZE		equ 	  8			; each PUSH subtracts 8 bytes from RSP
 ZERO			equ		  0			; the number 0
-;============================ DEFINE MACRO ==================================
+;============================= MACRO DEFINITION =============================
 %macro getSaveEnv	1				;===== getSaveEnv macro takes 1 arg =====
 	lea		rdi, [env%1]			; env%1 = ASCIIZ env var name
 	call	getenv					; getenv will return with [RAX] => ASCIIZ
 	lea 	rdi, [buf%1]			; buf%1 = env var dest- 1st arg to strncpy
 	mov		rsi, rax				; [rsi] => ASCIIZ src - 2nd arg to strncpy
 	mov		rdx, BUFF_SIZE - 1		; rdx = max # to copy - 3rd arg to strncpy
-	cmp		RAX, ZERO				; did we get an invalid value?
-	jnz		%%copy					; jump if valid
-	lea		rsi, [nullLine]			; if invalid, write "(null)"
-%%copy
+	lea		rcx, [nullLine]			; [rcx] => "(null)"
+	cmp		rax, ZERO				; did we get an invalid value (rax == 0)?
+	cmovz	rsi, rcx				; if invalid, strncpy "(null)"
 	call	strncpy					; call C library function to save env var
 %endmacro							;======== end of getSaveEnv macro =======
 ;============================== CODE SECTION ================================
