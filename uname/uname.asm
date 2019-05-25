@@ -1,20 +1,20 @@
 ;============================================================================
 ; uname.asm - retrieve uname info from the kernel and print it
 ; John Schwartzman, Forte Systems, Inc.
-; 05/13/2019
+; 05/20/2019
 ; linux x86_64
 ; yasm -f elf64 -g dwarf2 -o uname.obj uname.asm
 ; ld -g uname.obj -o uname
 ;============================ CONSTANT DEFINITIONS ==========================
-STDOUT          equ     1           ; file descriptor for terminal
+STDOUT          equ      1          ; file descriptor for terminal
 SYS_EXIT        equ     60          ; Linux service ID for SYS_EXIT
-SYS_WRITE       equ     1           ; Linux service ID for SYS_WRITE
+SYS_WRITE       equ      1          ; Linux service ID for SYS_WRITE
 SYS_UNAME       equ     63          ; Linux service ID for SYS_UNAME
 UTSNAME_SIZE    equ     65          ; number of bytes in each *_res entry
 HEADER_SIZE     equ     11          ; size of each header
-WRITELINE_SIZE  equ     1           ; num bytes to write for linefeed
+WRITELINE_SIZE  equ      1          ; num bytes to write for linefeed
 LF              equ     10          ; ASCII linefeed character
-ZERO            equ     0
+ZERO            equ      0          ; the number 0
 ;============================== CODE SECTION ================================
 section     .text
 global      _start                  ; ld expects to find the label _start
@@ -22,7 +22,7 @@ global      _start                  ; ld expects to find the label _start
 _start:				    	        ; beginning of program
     mov	    rax, SYS_UNAME          ; prepare to call SYS_UNAME
     lea 	rdi, [sysname_res]      ; RDI points to address of structure
-    syscall                     	; call SYS_UNAME to populate section .bss
+    syscall                     	; call SYS_UNAME to populate .bss section
     mov 	rdi, rax                ; if -1 is returned in rax
     cmp 	rax, ZERO               ; put it in rdi to tell OS we failed
     jnz 	exit                    ; exit if error getting SYS_UNAME
@@ -76,9 +76,9 @@ writeData:      ;===== local method - caller sets SYS_WRITE 2nd param =====
 
 writeNewLine:				        ;============ local method ============
     mov 	rax, SYS_WRITE		    ; Linux service ID
-    mov 	rdi, STDOUT             ; rdi is 1st arg
-    lea 	rsi, [linefeed]         ; 2nd argument
-    mov 	rdx, WRITELINE_SIZE     ; 3rd argument
+    mov 	rdi, STDOUT             ; SYS_WRITE 1st arg
+    lea 	rsi, [linefeed]         ; SYS_WRITE 2nd arg
+    mov 	rdx, WRITELINE_SIZE     ; SYS_WRITE 3rd arg
     syscall                         ; invoke kernel
     ret
 ;========================= READ-ONLY DATA SECTION ===========================
