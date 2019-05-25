@@ -4,7 +4,7 @@
 ; environment.asm does not have a main. It exports the function with the 
 ; declaration: int printenv(const char* dateStr);
 ; John Schwartzman, Forte Systems, Inc.
-; 05/18/2019
+; 05/19/2019
 ; linux x86_64
 ; yasm -f elf64 -o environment.obj -l environment.lst environment.asm
 ; gcc environment.c environment.obj -o environment
@@ -23,10 +23,9 @@ ZERO			equ		  0			; the number 0
 	lea 	rdi, [buf%1]			; buf%1 = env var dest- 1st arg to strncpy
 	mov		rsi, rax				; [rsi] => ASCIIZ src - 2nd arg to strncpy
 	mov		rdx, BUFF_SIZE - 1		; rdx = max # to copy - 3rd arg to strncpy
-	cmp		RAX, ZERO				; did we get an invalid value?
-	jnz		%%copy					; jump if valid
-	lea		rsi, [nullLine]			; if invalid, add "(null)"
-%%copy
+	lea		rcx, [nullLine]			; [rcx] => "(null)"
+	cmp		rax, ZERO				; did we get an invalid value (rax == 0)?
+	cmovz	rsi, rcx				; if invalid, strncpy "(null)"
 	call	strncpy					; call C library function to save env var
 %endmacro							;======== end of getSaveEnv macro =======
 ;============================== CODE SECTION ================================

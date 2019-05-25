@@ -2,7 +2,7 @@
 #
 #	Makefile for environment
 # 	John Schwartzman, Forte Systems, Inc.
-# 	05/16/2019
+# 	05/24/2019
 #
 #	Commands:  make release, make debug, make clean
 #			   make = make release
