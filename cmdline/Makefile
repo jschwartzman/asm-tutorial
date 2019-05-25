@@ -2,7 +2,7 @@
 #
 #	Makefile for cmdline
 #	John Schwartzman, Forte Systems, Inc.
-#	05/16/2019
+#	05/24/2019
 #
 #	Commands:  make release, make debug, make clean
 #			   make = make release
@@ -21,7 +21,7 @@ release: $(PROG).asm Makefile
 debug: $(PROG).asm Makefile
 	@source ../maketest.sh && test debug release
 	yasm -f elf64 -g dwarf2 -o $(PROG).obj $(PROG).asm
-	gcc -m64 -no-pie -g $(PROG).obj -o $(PROG)
+	gcc -m64 -g -no-pie $(PROG).obj -o $(PROG)
 	gcc -g $(PROG).c
 
 clean:

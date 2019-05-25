@@ -1,15 +1,15 @@
 ;============================================================================
 ; cmdline.asm - retrieve cmdline info from the OS and print it
 ; John Schwartzman, Forte Systems, Inc.
-; 05/13/2019
+; 05/24/2019
 ; linux x86_64
 ; yasm -f elf64 -g dwarf2 -o cmdline.obj cmdline.asm
 ; gcc -g cmdline.obj -o cmdline
 ;============================ CONSTANT DEFINITIONS ==========================
-LF              equ 10				; ASCII linefeed char
-EOL             equ 0				; end of line
-TAB				equ 9				; ASCII tab char
-ARG_SIZE		equ 8				; size of argv vector
+LF              equ		10			; ASCII linefeed char
+EOL             equ		 0			; end of line
+TAB				equ		 9			; ASCII tab char
+ARG_SIZE		equ		 8			; size of argv vector
 ;============================== CODE SECTION ================================
 section	.text
 global	main						; gcc linker expects main, not _start
