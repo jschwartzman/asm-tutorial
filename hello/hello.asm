@@ -1,15 +1,15 @@
 ;============================================================================
 ; hello.asm
 ; John Schwartzman, Forte Systems, Inc.
-; 05/13/2019
+; 05/24/2019
 ; yasm -g dwarf2 -f elf64 hello.asm -o hello.obj
 ; ld -g -o hello hello.obf
 ;============================= CONSTANT DEFINITIONS =========================
-LF        		equ 10		; ASCII linefeed character
-EXIT_SUCCESS	equ 0		; Linux apps normally return 0 to indicate success
-STDOUT			equ 1		; destination for SYS_WRITE
-SYS_WRITE		equ 1		; kernel SYS_WRITE service number
-SYS_EXIT		equ 60		; kernel SYS_EXIT service number
+LF        		equ		10			; ASCII linefeed character
+EXIT_SUCCESS	equ  	 0			; Linux apps normally return 0 to indicate success
+STDOUT			equ  	 1			; destination for SYS_WRITE
+SYS_WRITE		equ  	 1			; kernel SYS_WRITE service number
+SYS_EXIT		equ 	60			; kernel SYS_EXIT service number
 ;================================ CODE SECTION ==============================
 section	.text
 global 	_start
@@ -26,6 +26,6 @@ _start:
 	syscall							; invoke Linux kernel SYS_EXIT service
 ;========================== READ-ONLY DATA SECTION ==========================
 section 		.rodata
-    msg: 		db "Hello, world!", LF, LF
-    msglen: 	equ $ - msg
+    msg: 		db 		"Hello, world!", LF, LF
+    msglen: 	equ 	$ - msg
 ;============================================================================
