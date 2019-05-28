@@ -1,10 +1,11 @@
 ;============================================================================
 ; environment.asm - demonstrates invoking getenv, printf and strncpy 
 ; in /lib64/libc.so.6
+; environment.asm is called by environment.c (environment.c has main())
 ; environment.asm does not have a main. It exports the function with the 
 ; declaration: int printenv(const char* dateStr);
 ; John Schwartzman, Forte Systems, Inc.
-; 05/19/2019
+; 05/26/2019
 ; linux x86_64
 ; yasm -f elf64 -o environment.obj -l environment.lst environment.asm
 ; gcc environment.c environment.obj -o environment
@@ -13,7 +14,7 @@ BUFF_SIZE		equ 	128			; number of bytes in buffer
 LF				equ 	 10			; ASCII line feed character
 EOL   			equ 	  0			; end of line character
 TAB				equ 	  9			; ASCII tab character
-NUM_PUSH		equ 	  9			; we PUSH 9 addresses to call printf
+NUM_PUSH		equ 	  9			; we PUSH 9 addresses for call to printf
 PUSH_SIZE		equ 	  8			; each PUSH subtracts 8 bytes from RSP
 ZERO			equ		  0			; the number 0
 ;============================= MACRO DEFINITION =============================
@@ -81,7 +82,7 @@ printenv:
 	ret								; return to caller
 ;========================= READ-ONLY DATA SECTION ===========================
 section		.rodata
-formatString	db LF,  "Environment Variables on %s:",	LF
+formatString	db LF,  	"Environment Variables on %s:",	LF
 				db TAB, "HOME     = %s",				LF
 				db TAB, "HOSTNAME = %s", 				LF
 				db TAB, "HOSTTYPE = %s",				LF
