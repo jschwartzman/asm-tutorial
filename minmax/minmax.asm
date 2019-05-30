@@ -1,19 +1,21 @@
 ;============================================================================
 ; minmax.asm - demonstrates using macros for code and for local variables
 ; John Schwartzman, Forte Systems, Inc.
-; 05/26/2019
+; 05/29/2019
 ; linux x86_64
 ; yasm -f elf64 -g dwarf2 -o printMax.obj -l printMax.lst printMax.asm
 ;============================ CONSTANT DEFINITIONS ==========================
 LF				equ 	 10			; ASCII linefeed character
 EOL   			equ 	  0			; end of line character
-VAR_SIZE		equ 	  8			; each local var is 8 bytes wide (qword)
+VAR_SIZE		equ 	  8			; each local var is 8 bytes wide - qword
 NUM_VAR			equ		  2			; number local var (round up to even num)
 ;========================== DEFINE LOCAL VARIABLES ==========================
 %define		b 		qword [rsp + VAR_SIZE * (NUM_VAR - 1)]		; rsp + 8
 %define		a 		qword [rsp + VAR_SIZE * (NUM_VAR - 2)]		; rsp + 0
 ;============================== DEFINE MACRO ================================
 %macro prologue	0					;=== prologue macro takes 0 arguments ===
+	push	rbp						; set up stack frame
+	mov		rbp, rsp				; set up stack frame
 	sub		rsp, VAR_SIZE * NUM_VAR	; allocate space for local var on stack
 	mov		a, rdi					; rdi contains a - 1st arg to min or max
 	mov		b, rsi					; rsi contains b - 2nd arg to min or max
@@ -29,6 +31,7 @@ NUM_VAR			equ		  2			; number local var (round up to even num)
 	call	printf					; invoke the C function
 	pop		rax						; rax = return ; we PUSH rcx, but POP rax
 	add		rsp, VAR_SIZE * NUM_VAR	; free space used by local variables
+	leave							; undo 1st 2 prologue instructions
 	ret								; return to caller 
 %endmacro							;========= end of epilogue macro ========
 ;============================== DEFINE MACRO ================================
