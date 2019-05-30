@@ -5,7 +5,7 @@
 ; environment.asm does not have a main. It exports the function with the 
 ; declaration: int printenv(const char* dateStr);
 ; John Schwartzman, Forte Systems, Inc.
-; 05/29/2019
+; 05/30/2019
 ; linux x86_64
 ; yasm -f elf64 -o environment.obj -l environment.lst environment.asm
 ; gcc -g environment.c environment.obj -o environment
@@ -37,7 +37,7 @@ extern 		getenv, printf, strncpy	; tell assembler about externals
 ;============================= EXPORTED FUNCTION ============================
 printenv:							
 	push	rbp						; set up stack frame
-	mov		rbp, rsp				; set up stack frame
+	mov		rbp, rsp				; set up stack frame - stack now aligned
 	sub		rsp, 8					; want rsp 16-bit aligned after 1 push
 	push	rdi						; save arg on the stack (dateStr)
 
@@ -58,24 +58,24 @@ printenv:
 
 	; call printf with many, many arguments
 	; pass args in RDI, RSI, RDX, RCX, R8 and R9 with remaining args on stack
-	lea		rdi, [formatString]		;  1st printf arg -  1st read by printf
-	pop		rsi						;  2nd printf arg -  2nd read by printf
-	lea		rdx, [bufHOME]			;  3rd printf arg -  3rd read by printf
-	lea		rcx, [bufHOSTNAME]		;  4th printf arg -  4th read by printf
-	lea		r8,  [bufHOSTTYPE]		;  5th printf arg -  5th read by printf
-	lea		r9,  [bufCPU]			;  6th printf arg -  6th read by printf
+	lea		rdi, [formatString]		;  1st printf arg
+	pop		rsi						;  2nd printf arg
+	lea		rdx, [bufHOME]			;  3rd printf arg
+	lea		rcx, [bufHOSTNAME]		;  4th printf arg
+	lea		r8,  [bufHOSTTYPE]		;  5th printf arg
+	lea		r9,  [bufCPU]			;  6th printf arg
 	; we've used all 6 argument passing registers - PUSH remaining args
 	; NOTE: PUSHes performed in reverse order because
 	; 		args are read from top of stack! The stack grows downward!
-	push	bufHISTFILE				; 15th printf arg - 15th read by printf
-	push	bufPS1					; 14th printf arg - 14th read by printf
-	push	bufLANG					; 13th printf arg - 13th read by printf
-	push	bufMAIL					; 12th printf arg - 12th read by printf
-	push	bufEDITOR				; 11th printf arg - 11th read by printf
-	push	bufSHELL				; 10th printf arg - 10th read by printf
-	push	bufPATH					;  9th printf arg -  9th read by printf
-	push	bufTERM					;  8th printf arg -  8th read by printf
-	push	bufPWD					;  7th printf arg -  7th read by printf
+	push	bufHISTFILE				; 15th printf arg
+	push	bufPS1					; 14th printf arg
+	push	bufLANG					; 13th printf arg
+	push	bufMAIL					; 12th printf arg
+	push	bufEDITOR				; 11th printf arg
+	push	bufSHELL				; 10th printf arg
+	push	bufPATH					;  9th printf arg
+	push	bufTERM					;  8th printf arg
+	push	bufPWD					;  7th printf arg
 
 	xor		rax, rax				; no floating point arguments
 	call	printf					; invoke the C wrapper function to print
@@ -86,7 +86,7 @@ printenv:
 	ret								; return to caller
 ;========================= READ-ONLY DATA SECTION ===========================
 section		.rodata
-formatString	db LF,  	"Environment Variables on %s:",	LF
+formatString	db LF,  "Environment Variables on %s:",	LF
 				db TAB, "HOME     = %s",				LF
 				db TAB, "HOSTNAME = %s", 				LF
 				db TAB, "HOSTTYPE = %s",				LF
