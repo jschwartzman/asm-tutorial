@@ -1,18 +1,18 @@
 ;============================================================================
 ; history.asm - determines ~/ and displays the contents of ~/.bash_history
 ; John Schwartzman, Forte Systems, Inc.
-; 05/11/2019
+; 05/30/2019
 ; linux x86_64
 ; yasm -f elf64 -g dwarf2 -o history.obj history.asm
 ; gcc -g history.obj -o history
 ;============================ CONSTANT DEFINITIONS ==========================
-ZERO			equ	0
-EOL             equ 0				; end of line char
-LF              equ 10				; ASCII linefeed char
-O_RDONLY        equ 000000q			; read flags
+ZERO			equ	   0			; the number 0
+EOL             equ    0			; end of line char
+LF              equ   10			; ASCII linefeed char
 BUFF_SIZE       equ	1024			; size of file read
-USER_DIR_SIZE   equ 256				; size of file directory + filename
-NO_ENVVAR_ERROR	equ	-1				; return this if can't get env variable
+USER_DIR_SIZE   equ  256			; size of file directory + filename
+NO_ENVVAR_ERROR	equ	  -1			; return this if can't get env variable
+O_RDONLY        equ 0x0000			; open for reding only
 ;============================== CODE SECTION ================================
 section	.text
 global main
@@ -21,6 +21,9 @@ extern getenv, printf, strncpy		; tell assembler about external references
 extern strncat, open, read, close
 
 main:								; start of program
+	push	rbp						; set up stack frame
+	mov		rbp, rsp				; set up stack frame
+
 	call	printNewLine			; call local method
 
 	; get env var "HOME"
@@ -86,6 +89,7 @@ errorOnRead:						; rax contains error code
 	jmp   	closeFile				; and get out
 
 finish:
+	leave							; undo 1st 2 instructions
 	ret                           	; return from main (exit program)
 ;=============================== LOCAL METHODS ==============================
 printNewLine:						; local method (alt entry to print)
