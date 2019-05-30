@@ -10,8 +10,8 @@ EOL   			equ 	  0			; end of line character
 VAR_SIZE		equ 	  8			; each local var is 8 bytes wide - qword
 NUM_VAR			equ		  2			; number local var (round up to even num)
 ;========================== DEFINE LOCAL VARIABLES ==========================
-%define		b 		qword [rsp + VAR_SIZE * (NUM_VAR - 1)]		; rsp + 8
 %define		a 		qword [rsp + VAR_SIZE * (NUM_VAR - 2)]		; rsp + 0
+%define		b 		qword [rsp + VAR_SIZE * (NUM_VAR - 1)]		; rsp + 8
 ;============================== DEFINE MACRO ================================
 %macro prologue	0					;=== prologue macro takes 0 arguments ===
 	push	rbp						; set up stack frame
