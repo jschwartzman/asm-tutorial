@@ -5,10 +5,10 @@
 ; environment.asm does not have a main. It exports the function with the 
 ; declaration: int printenv(const char* dateStr);
 ; John Schwartzman, Forte Systems, Inc.
-; 05/26/2019
+; 05/29/2019
 ; linux x86_64
 ; yasm -f elf64 -o environment.obj -l environment.lst environment.asm
-; gcc environment.c environment.obj -o environment
+; gcc -g environment.c environment.obj -o environment
 ;============================ CONSTANT DEFINITIONS ==========================
 BUFF_SIZE		equ 	128			; number of bytes in buffer
 LF				equ 	 10			; ASCII line feed character
@@ -36,7 +36,10 @@ extern 		getenv, printf, strncpy	; tell assembler about externals
 									; this module doesn't have _start or main
 ;============================= EXPORTED FUNCTION ============================
 printenv:							
-	push	rdi						; save parameter on the stack (dateStr)
+	push	rbp						; set up stack frame
+	mov		rbp, rsp				; set up stack frame
+	sub		rsp, 8					; want rsp 16-bit aligned after 1 push
+	push	rdi						; save arg on the stack (dateStr)
 
 	; get and save environment variables by using macro for each env var
 	getSaveEnv HOME
@@ -76,9 +79,10 @@ printenv:
 
 	xor		rax, rax				; no floating point arguments
 	call	printf					; invoke the C wrapper function to print
-	add		rsp, NUM_PUSH*PUSH_SIZE	; we must remove items pushed on stack
+	add		rsp, NUM_PUSH*PUSH_SIZE	; caller must remove items pushed
+	xor		rax, rax				; return EXIT_SUCCESS = 0
 
-	xor		rax, rax				; return EXIT_SUCCESS = 0	
+	leave							; undo 1st 2 instructions
 	ret								; return to caller
 ;========================= READ-ONLY DATA SECTION ===========================
 section		.rodata
