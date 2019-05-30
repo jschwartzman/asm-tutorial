@@ -1,7 +1,7 @@
 ;============================================================================
 ; minmax.asm - demonstrates using macros for code and for local variables
 ; John Schwartzman, Forte Systems, Inc.
-; 05/29/2019
+; 05/30/2019
 ; linux x86_64
 ; yasm -f elf64 -g dwarf2 -o printMax.obj -l printMax.lst printMax.asm
 ;============================ CONSTANT DEFINITIONS ==========================
@@ -15,7 +15,7 @@ NUM_VAR			equ		  2			; number local var (round up to even num)
 ;============================== DEFINE MACRO ================================
 %macro prologue	0					;=== prologue macro takes 0 arguments ===
 	push	rbp						; set up stack frame
-	mov		rbp, rsp				; set up stack frame
+	mov		rbp, rsp				; set up stack frame - stack now aligned
 	sub		rsp, VAR_SIZE * NUM_VAR	; allocate space for local var on stack
 	mov		a, rdi					; rdi contains a - 1st arg to min or max
 	mov		b, rsi					; rsi contains b - 2nd arg to min or max
