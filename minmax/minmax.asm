@@ -1,13 +1,13 @@
 ;============================================================================
 ; minmax.asm - demonstrates using macros for code and for local variables
 ; John Schwartzman, Forte Systems, Inc.
-; 05/30/2019
+; 05/31/2019
 ; linux x86_64
 ; yasm -f elf64 -g dwarf2 -o printMax.obj -l printMax.lst printMax.asm
 ;============================ CONSTANT DEFINITIONS ==========================
 LF				equ 	 10			; ASCII linefeed character
 EOL   			equ 	  0			; end of line character
-VAR_SIZE		equ 	  8			; each local var is 8 bytes wide - qword
+VAR_SIZE		equ 	  8			; each local var is 8 bytes
 NUM_VAR			equ		  2			; number local var (round up to even num)
 ;========================== DEFINE LOCAL VARIABLES ==========================
 %define		a 		qword [rsp + VAR_SIZE * (NUM_VAR - 2)]		; rsp + 0
@@ -16,7 +16,7 @@ NUM_VAR			equ		  2			; number local var (round up to even num)
 %macro prologue	0					;=== prologue macro takes 0 arguments ===
 	push	rbp						; set up stack frame
 	mov		rbp, rsp				; set up stack frame - stack now aligned
-	sub		rsp, VAR_SIZE * NUM_VAR	; allocate space for local var on stack
+	sub		rsp, VAR_SIZE * NUM_VAR	; make space for local variables on stack
 	mov		a, rdi					; rdi contains a - 1st arg to min or max
 	mov		b, rsi					; rsi contains b - 2nd arg to min or max
 	mov		rsi, a					; 2nd arg to printf = a
@@ -47,7 +47,7 @@ NUM_VAR			equ		  2			; number local var (round up to even num)
 ;============================== CODE SECTION ================================
 section		.text					
 global 		printMax, printMin		; tell linker about exported functions
-extern 		printf					; tell assembler about external
+extern 		printf					; tell assembler/linker about externals
 
 printMax:							;=========== printMax function ==========
 	prologue
