@@ -32,7 +32,7 @@ ZERO			equ		  0			; the number 0
 ;============================== CODE SECTION ================================
 section		.text					;============= CODE SECTION =============
 global 		printenv				; tell gcc linker we're exporting prntenv
-extern 		getenv, printf, strncpy	; tell assembler about externals
+extern 		getenv, printf, strncpy	; tell assembler/linker about externals
 									; this module doesn't have _start or main
 ;============================= EXPORTED FUNCTION ============================
 printenv:							
