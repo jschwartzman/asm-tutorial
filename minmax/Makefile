@@ -2,12 +2,14 @@
 #
 #	Makefile for minmax
 # 	John Schwartzman, Forte Systems, Inc.
-# 	05/16/2019
+# 	06/07/2019
 #
 #	Commands:  make release, make debug, make clean
 #			   make = make release
 #   Requires:  ../maketest.sh
 #
+#	Builds both versions of minmax.c:  a.out  - c only
+#									   minmax - c and assembly
 #############################################################################
 PROG  := minmax
 SHELL := /bin/bash
