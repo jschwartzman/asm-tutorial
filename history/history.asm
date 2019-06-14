@@ -1,7 +1,7 @@
 ;============================================================================
 ; history.asm - determines ~/ and displays the contents of ~/.bash_history
 ; John Schwartzman, Forte Systems, Inc.
-; 05/30/2019
+; 06/01/2019
 ; linux x86_64
 ; yasm -f elf64 -g dwarf2 -o history.obj history.asm
 ; gcc -g history.obj -o history
@@ -17,7 +17,7 @@ O_RDONLY        equ 0x0000			; open for reding only
 section	.text
 global main
 
-extern getenv, printf, strncpy		; tell assembler about external references
+extern getenv, printf, strncpy		; tell assembler/linker about externals
 extern strncat, open, read, close
 
 main:								; start of program
@@ -96,12 +96,12 @@ printNewLine:						; local method (alt entry to print)
 	lea		rdi, [newLine]			; fall through to print
 
 print:								; local method - expects [rdi] => asciiz
-	xor		rax, rax				; no floating point args to printf
+    xor		rax, rax				; no floating point args to printf
 	call	printf
 	ret
 ;=========================== INITIALIZED DATA SECTION =======================
 section		.data
-fd	    		dd	0				; file descriptor (doubleword = 32-bit int)
+fd	    		dd	0				; file descriptor (32-bit int)
 ;========================= READ-ONLY DATA SECTION ===========================
 section     .rodata
 filename        db "/.bash_history", EOL
