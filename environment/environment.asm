@@ -1,11 +1,10 @@
 ;============================================================================
 ; environment.asm - demonstrates invoking getenv, printf and strncpy 
-; in /lib64/libc.so.6
 ; environment.asm is called by environment.c (environment.c has main())
 ; environment.asm does not have a main. It exports the function with the 
 ; declaration: int printenv(const char* dateStr);
 ; John Schwartzman, Forte Systems, Inc.
-; 05/30/2019
+; 06/02/2019
 ; linux x86_64
 ; yasm -f elf64 -o environment.obj -l environment.lst environment.asm
 ; gcc -g environment.c environment.obj -o environment
@@ -38,7 +37,7 @@ extern 		getenv, printf, strncpy	; tell assembler/linker about externals
 printenv:							
 	push	rbp						; set up stack frame
 	mov		rbp, rsp				; set up stack frame - stack now aligned
-	sub		rsp, 8					; want rsp 16-bit aligned after 1 push
+	sub		rsp, PUSH_SIZE			; want rsp 16-bit aligned after 1 push
 	push	rdi						; save arg on the stack (dateStr)
 
 	; get and save environment variables by using macro for each env var
@@ -59,7 +58,8 @@ printenv:
 	; call printf with many, many arguments
 	; pass args in RDI, RSI, RDX, RCX, R8 and R9 with remaining args on stack
 	lea		rdi, [formatString]		;  1st printf arg
-	pop		rsi						;  2nd printf arg
+	pop		rsi						;  2nd printf arg - pushed rdi, popped rsi
+    add     rsp, PUSH_SIZE          ;  correct stack alignment
 	lea		rdx, [bufHOME]			;  3rd printf arg
 	lea		rcx, [bufHOSTNAME]		;  4th printf arg
 	lea		r8,  [bufHOSTTYPE]		;  5th printf arg
