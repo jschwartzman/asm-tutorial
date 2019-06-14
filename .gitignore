@@ -6,6 +6,8 @@ hello
 getenv
 environment
 minmax
+factorial
+hhmmss
 printenv
 prntenv
 history
