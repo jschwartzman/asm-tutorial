@@ -16,7 +16,7 @@
 PROG  := factorial
 SHELL := /bin/bash
 EXT	  := ../commaSeparate/commaSeparate
-#DEF  := __COMMA__
+#DEF  := __COMMA__	#### USE THIS OPTION TO LINK WITH commaSeparate.asm #####
 
 ifeq ($(DEF), __COMMA__)	############### use commaSeparate ###############
 
