@@ -2,7 +2,7 @@
 #
 #	Makefile for history
 # 	John Schwartzman, Forte Systems, Inc.
-# 	06/02/2019
+# 	06/16/2019
 #
 #	Commands:  make release, make debug, make clean
 #			   make = make release
@@ -12,13 +12,13 @@
 PROG  := history
 SHELL := /bin/bash
 
-release: $(PROG).asm Makefile
+release: $(PROG).c $(PROG).asm Makefile
 	@source ../maketest.sh && test release debug
 	yasm -f elf64 -o $(PROG).obj $(PROG).asm
 	gcc -no-pie -m64 $(PROG).obj -o $(PROG)
 	gcc $(PROG).c
 
-debug: $(PROG).asm Makefile
+debug: $(PROG).c $(PROG).asm Makefile
 	@source ../maketest.sh && test debug release
 	yasm -f elf64 -g dwarf2 -o $(PROG).obj $(PROG).asm
 	gcc -m64 -g -no-pie $(PROG).obj -o $(PROG)

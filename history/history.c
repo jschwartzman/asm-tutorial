@@ -1,6 +1,6 @@
 // history.c
 // John Schwartzman, Forte Systems, Inc.
-// 05/06/2019
+// 06/16/2019
 // x86_64
 // compile with: gcc history.c or gcc -g history.c (debug)
 // to execute:   ./a.out
@@ -18,7 +18,7 @@ int main(void)
 {
 	char* env = getenv("HOME");						// get home env variable
 	char* filedir = strcat(env, "/.bash_history");	// append filename to env
-	const char* buffer[BUF_SIZE];					// buffer for file read
+	char buffer[BUF_SIZE];					        // buffer for file read
 	
 	printf("\n");									// print blank line
 	int fd = open(filedir, O_RDONLY);				// open file
