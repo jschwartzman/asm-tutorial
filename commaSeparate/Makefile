@@ -2,7 +2,7 @@
 #
 #	Makefile for commaSeparate
 # 	John Schwartzman, Forte Systems, Inc.
-# 	06/07/2019
+# 	06/15/2019
 #
 #	Commands:  make release, make debug, make clean
 #			   make = make release
@@ -14,7 +14,10 @@
 #############################################################################
 PROG  := commaSeparate
 SHELL := /bin/bash
-#DEF  := __MAIN__
+#DEF  := __MAIN__	
+
+##### BUILD WITHOUT DEFINING __MAIN__ IN ORDER TO LINK WITH factorial. ######
+################## BUILD THIS BEFORE BUILDING factorial. ####################
 
 ifeq ($(DEF), __MAIN__)	############### STAND ALONE PROGRAM #################
 
@@ -28,7 +31,7 @@ debug: $(PROG).asm Makefile
 	yasm -D $(DEF) -f elf64 -g dwarf2 -o $(PROG).obj -l $(PROG).lst $(PROG).asm
 	gcc -g -no-pie $(PROG).obj -o $(PROG)
 
-else
+else	#####################################################################
 
 release: $(PROG).asm Makefile
 	@source ../maketest.sh && test release debug
