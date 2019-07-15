@@ -1,8 +1,8 @@
 ;============================================================================
 ; commaSeparate.asm
 ; John Schwartzman, Forte Systems, Inc.
-; 06/07/2019
-; linux x86_64
+; 06/20/2019
+; Linux x86_64
 ; yasm -f elf64 -g dwarf2 -o commaSeparate.obj 
 ;      -l commaSeparate.lst commaSeparate.asm
 ;============================ CONSTANT DEFINITIONS ==========================
@@ -26,13 +26,13 @@ QUINTILLION     equ    THOUSAND * QUADRILLION
 
 %define     zero(reg)    xor reg, reg
 ;=============================== DEFINE MACRO ===============================
-%macro  writePowerOfThree     1
+%macro  writePowerOfTen     1
     mov     rax, n
     zero (rdx)
     mov     rcx, %1                 ; %1 = divisor
     idiv    rcx
     mov     rdi, rax
-    push    rdi                     ; save number of PowerOfThree
+    push    rdi                     ; save number of PowerOfTen
     call    writeThreeDigits
     pop     rcx
     mov     rax, %1                 ; %1 = divisor
@@ -133,12 +133,12 @@ commaSeparate:                      ; param rdi = long int
     mov     rax, rdi                ; get n
     mov     n, rax                  ; initialize n
 
-    writePowerOfThree QUINTILLION
-    writePowerOfThree QUADRILLION
-    writePowerOfThree TRILLION
-    writePowerOfThree BILLION
-    writePowerOfThree MILLION
-    writePowerOfThree THOUSAND
+    writePowerOfTen QUINTILLION
+    writePowerOfTen QUADRILLION
+    writePowerOfTen TRILLION
+    writePowerOfTen BILLION
+    writePowerOfTen MILLION
+    writePowerOfTen THOUSAND
     writeUnits
 
     lea     rax, [outputBuf]        ; return pointer to outputBuf in rax
